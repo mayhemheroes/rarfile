@@ -52,8 +52,8 @@ jobs:
           - {OS: "ubuntu-latest", PY: "pypy3.7", PYNAME: "PyPy3.7", TOXENV: "pypy37"}
           - {OS: "ubuntu-latest", PY: "pypy3.8", PYNAME: "PyPy3.8", TOXENV: "pypy38"}
           - {OS: "ubuntu-latest", PY: "pypy3.9", PYNAME: "PyPy3.9", TOXENV: "pypy39-cryptography"}
-          - {OS: "windows-latest", PY: "3.9", TOXENV: "py39" }
-          - {OS: "windows-latest", PY: "3.10", TOXENV: "py310-cryptography" }
+          - {OS: "windows-latest", PY: "3.9", PYNAME: "Python 3.9", TOXENV: "py39" }
+          - {OS: "windows-latest", PY: "3.10", PYNAME: "Python 3.10", TOXENV: "py310-cryptography" }
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
@@ -77,7 +77,7 @@ jobs:
         run: |
           set "PATH=c:\msys64\usr\bin;%PATH%"
           pacman -S --noconfirm --needed unrar bsdtar
-          set "PATH=%PATH%;c:\msys64\usr\bin"
+          echo "c:\msys64\usr\bin">>%GITHUB_PATH%
 
       - name: "Install tox"
         run: |
