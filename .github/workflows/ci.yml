@@ -77,7 +77,7 @@ jobs:
         run: |
           set "PATH=c:\msys64\usr\bin;%PATH%"
           pacman -S --noconfirm --needed unrar bsdtar
-          echo "c:\msys64\usr\bin">>%GITHUB_PATH%
+          echo PATH=%PATH%;c:\msys64\usr\bin>>%GITHUB_ENV%
 
       - name: "Install tox"
         run: |
