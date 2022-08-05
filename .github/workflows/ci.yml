@@ -15,12 +15,12 @@ on:
 jobs:
 
   lint:
-    name: "Lint - Ubuntu ${{matrix.pick.OS}} / Python ${{matrix.pick.PY}}"
+    name: "Lint - ${{matrix.pick.OS}} / Python ${{matrix.pick.PY}}"
     runs-on: ubuntu-${{matrix.pick.OS}}
     strategy:
       matrix:
         pick:
-          - {OS: "latest", PY: "3.10", TOXENV: "lint,docs"}
+          - {OS: "ubuntu-latest", PY: "3.10", TOXENV: "lint,docs"}
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
@@ -52,6 +52,8 @@ jobs:
           - {OS: "ubuntu-latest", PY: "pypy3.7", PYNAME: "PyPy3.7", TOXENV: "pypy37"}
           - {OS: "ubuntu-latest", PY: "pypy3.8", PYNAME: "PyPy3.8", TOXENV: "pypy38"}
           - {OS: "ubuntu-latest", PY: "pypy3.9", PYNAME: "PyPy3.9", TOXENV: "pypy39-cryptography"}
+          - {OS: "macos-latest", PY: "3.9", PYNAME: "Python 3.9", TOXENV: "py39-pycryptodome"}
+          - {OS: "macos-latest", PY: "3.10", PYNAME: "Python 3.10", TOXENV: "py310-cryptography"}
           - {OS: "windows-latest", PY: "3.9", PYNAME: "Python 3.9", TOXENV: "py39" }
           - {OS: "windows-latest", PY: "3.10", PYNAME: "Python 3.10", TOXENV: "py310-cryptography" }
     steps:
@@ -77,16 +79,25 @@ jobs:
         run: |
           set "PATH=c:\msys64\usr\bin;%PATH%"
           pacman -S --noconfirm --needed unrar bsdtar
-          echo PATH=%PATH%;c:\msys64\usr\bin>>%GITHUB_ENV%
 
       - name: "Install tox"
         run: |
           python --version
           python -m pip install tox wheel
 
-      - name: "Run tox - ${{matrix.pick.TOXENV}}"
+      - name: "Run tox - ${{matrix.pick.TOXENV}} - (linux/macos)"
+        if: ${{runner.os == 'Linux' || runner.os == 'macOS'}}
         env:
           TOXENV: ${{matrix.pick.TOXENV}}
         run: |
+          python -m tox -r -- --color=yes -n auto
+
+      - name: "Run tox - ${{matrix.pick.TOXENV}} - (windows)"
+        if: ${{runner.os == 'Windows'}}
+        env:
+          TOXENV: ${{matrix.pick.TOXENV}}
+        shell: cmd
+        run: |
+          set "PATH=%PATH%;c:\msys64\usr\bin"
           python -m tox -r -- --color=yes -n auto
 
