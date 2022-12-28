@@ -2,8 +2,8 @@
 
 import atheris
 import sys
-
 import fuzz_helpers
+import random
 
 with atheris.instrument_imports():
     import rarfile
@@ -18,6 +18,8 @@ def TestOneInput(data):
             for _ in rf.infolist():
                 pass
     except (rarfile.Error):
+        if random.random() > 0.999:
+            raise
         return -1
 
 def main():
