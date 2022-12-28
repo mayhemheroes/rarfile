@@ -17,9 +17,10 @@ def TestOneInput(data):
             rf = rarfile.RarFile(rar)
             for _ in rf.infolist():
                 pass
-    except (rarfile.Error):
-        if random.random() > 0.999:
+    except ValueError:
+        if random.random() > 0.99:
             raise
+    except (rarfile.Error):
         return -1
 
 def main():
