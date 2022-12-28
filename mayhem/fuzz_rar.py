@@ -18,7 +18,7 @@ def TestOneInput(data):
             for _ in rf.infolist():
                 pass
     except ValueError:
-        if random.random() > 0.99:
+        if random.random() > 0.9:
             raise
     except (rarfile.Error):
         return -1
