@@ -1,0 +1,9 @@
+project: rarfile
+target: fuzz-rar
+testsuite:
+    - file://mayhem/testsuite
+
+cmds:
+  - cmd: /src/mayhem/fuzz_rar.py
+    libfuzzer: true
+    timeout: 12
