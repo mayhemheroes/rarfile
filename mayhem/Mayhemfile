@@ -1,0 +1,15 @@
+# Mayhem target: rarfile RAR archive parser (Atheris/libFuzzer harness).
+# The cmd binary is the compiled ELF launcher that drives mayhem/fuzz_rar.py; Atheris instruments
+# the rarfile module so the run records coverage (edges). Mirrors the original mayhemheroes
+# fuzz-rar target (RarFile(...) + infolist()), now in the spec-v2 two-branch layout.
+project: rarfile
+target: fuzz-rar
+
+cmds:
+  - cmd: /mayhem/fuzz-rar
+    libfuzzer: true
+
+# Seed corpus of small valid RAR archives (file:// URIs, per the Mayhemfile schema).
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz-rar/testsuite
